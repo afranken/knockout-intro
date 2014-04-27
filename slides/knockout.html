@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Introduction to Knockout</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <link rel="stylesheet" href="../reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="../reveal.js/css/theme/solarized.css" id="theme">
+    <!--<link rel="stylesheet" href="../reveal.js/css/theme/moon.css" id="theme">-->
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="../reveal.js/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        document.write('<link rel="stylesheet" href="../reveal.js/css/print/' + ( window.location.search.match(/print-pdf/gi) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">');
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="../reveal.js/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+        <section>
+            <h1>Introduction to Knockout</h1>
+
+            <h3>A JavaScript library for building user interfaces</h3>
+
+            <p>
+                <small><a href="http://techotronic.de">Arne Franken</a> / <a href="http://twitter.com/techotronic">@techotronic</a>
+                </small>
+            </p>
+            <p>Online version at: <a href="http://afranken.github.io/knockout-intro">http://afranken.github.io/knockout-intro</a></p>
+        </section>
+        <section>
+            <h2>Knockout</h2>
+            <img src="http://knockoutjs.com/img/ko-logo.png"/>
+
+            <p><a target="_blank" href="http://knockoutjs.com/">http://knockoutjs.com/</a></p>
+
+            <p><a target="_blank" href="https://github.com/knockout/knockout">https://github.com/knockout/knockout</a></p>
+        </section>
+        <section>
+            <h2>Concepts - 1</h2>
+            <ul>
+                <li class="fragment">MVVM (Model, View, ViewModel)
+                    <ul>
+                        <li class="fragment">Model:
+                            <ul>
+                                <li class="fragment">domain model or data access</li>
+                                <li class="fragment">the same as in MVC</li>
+                            </ul>
+                        </li>
+                        <li class="fragment">View:
+                            <ul>
+                                <li class="fragment">UI that displays the state of the ViewModel</li>
+                                <li class="fragment">simple HTML document</li>
+                                <li class="fragment">not a "passive" view as in most other frameworks</li>
+                                <li class="fragment">rather an "active" view that displays the state of the ViewModel</li>
+                                <li class="fragment">views contain data-bindings and handle events to the ViewModel</li>
+                            </ul>
+                        </li>
+                        <li class="fragment">ViewModel:
+                            <ul>
+                                <li class="fragment">exposes data from the model to the view layer</li>
+                                <li class="fragment">handles the view's display and interaction logic</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h2>Concepts - 2</h2>
+            <ul>
+                <li class="fragment">Declarative data bindings
+                    <ul>
+                        <li class="fragment">using data-* attributes in the view
+                        <li class="fragment">two-way binding (model is updated when view is updated and vice versa)
+                        <li class="fragment">custom data bindings can be added easily
+                    </ul>
+                </li>
+                <li class="fragment">Automatic dependency tracking
+                    <ul>
+                        <li class="fragment">observable model values
+                        <li class="fragment">computed model values can use observable values and will change if they change
+                    </ul>
+                </li>
+                <li class="fragment">nested views / templates
+                    <ul>
+                        <li class="fragment">models or model values can be displayed with a template
+                        <li class="fragment">if model value changes, only the matching template is re-rendered
+                        <li class="fragment">if model value changes, only the matching DOM element/attribute/content is re-rendered
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Hello World</h3>
+<pre><code class="html" contenteditable>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+&lt;script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js">&lt;/script>
+&lt;/head>
+&lt;body>
+&lt;h1 data-bind='text: myText'>&lt;/h1>
+&lt;script type="text/javascript">
+    var ViewModel = function(text) {
+        this.myText = text;
+    };
+    ko.applyBindings(new ViewModel("Hello World!"));
+    &lt;/script>
+&lt;/body>
+&lt;/html>
+</code></pre>
+            <a href="../src/examples/1-hello-world/index.html" target="_blank">Run</a>
+            <ul>
+                <li class="fragment"><code>var ViewModel ...</code>: creates the model
+                <li class="fragment"><code>ko.applyBindings(new ViewModel())</code>: This makes Knockout get to work
+            </ul>
+        </section>
+        <section>
+            <section>
+                <h2>Examples from Knockout Homepage</h2>
+
+                <p><a target="_blank" href="http://knockoutjs.com/examples/">http://knockoutjs.com/examples/</a></p>
+            </section>
+        <section>
+            <h2>Simple two-way data binding</h2>
+<pre><code class="html" contenteditable>&lt;div class="liveExample">
+    &lt;p>First name: &lt;input data-bind='value: firstName, valueUpdate: "keypress"' />&lt;/p>
+    &lt;p>Last name: &lt;input data-bind='value: lastName, valueUpdate: "keypress"' />&lt;/p>
+    &lt;h2>Hello, &lt;span data-bind='text: fullName'> &lt;/span>!&lt;/h2>
+&lt;/div>
+&lt;script type="text/javascript">
+    var ViewModel = function(first, last) {
+    this.firstName = ko.observable(first);
+    this.lastName = ko.observable(last);
+    this.fullName = ko.computed(function() {
+        // Knockout tracks dependencies automatically.
+        return this.firstName() + " " + this.lastName();
+        }, this);
+    };
+    ko.applyBindings(new ViewModel("Arne", "Franken"));
+&lt;/script>
+</code></pre>
+            <p><a href="../src/examples/2-hello-world-binding/index.html" target="_blank">Run</a></p>
+            <ul>
+                <li class="fragment"><code>ko.observable</code>: KO fires internal events if variable values change
+                <li class="fragment"><code>ko.computed</code>: KO will update value if observables change
+                <li class="fragment"><code>ko.computed(function(){},this)</code>: <code>bind(this)</code> correctly...
+            </ul>
+        </section>
+        <section>
+            <h3>Simple List</h3>
+<pre><code class="html" contenteditable>&lt;form data-bind="submit: addItem">New item:
+    &lt;input data-bind='value: itemToAdd, valueUpdate: "afterkeydown"' />
+    &lt;button type="submit" data-bind="enable: itemToAdd().length > 0">Add&lt;/button>
+    &lt;p>Your items:&lt;/p>
+    &lt;select multiple="multiple" width="50" data-bind="options: items">&lt;/select>
+&lt;/form>
+&lt;script type="text/javascript">
+    var SimpleListModel = function(items) {
+        this.items = ko.observableArray(items);
+        this.itemToAdd = ko.observable("");
+        this.addItem = function() {
+            if (this.itemToAdd() != "") {
+                this.items.push(this.itemToAdd());
+                this.itemToAdd("");
+            }
+        }.bind(this);
+    };
+    ko.applyBindings(new SimpleListModel(["Alpha", "Beta", "Gamma"]));
+&lt;/script>
+</code></pre>
+            <p><a href="../src/examples/3-simple-list/index.html" target="_blank">Run</a></p>
+            <ul>
+                <li class="fragment"><code>this.items.push(this.itemToAdd());</code>: Adds the item. Writing to the "items" observableArray causes any associated UI to update.
+                <li class="fragment"><code>this.itemToAdd("")</code>: Clears the text box, because it's bound to the "itemToAdd" observable
+                <li class="fragment"><code>function(){}.bind(this)</code>: make sure to <code>bind(this)</code> correctly...
+            </ul>
+        </section>
+        <section>
+            <h3>Interactive list - HTML</h3>
+<pre><code class="html" contenteditable>&lt;form data-bind="submit:addItem">
+    Add item:
+    &lt;input type="text" data-bind='value:itemToAdd, valueUpdate: "afterkeydown"' />
+    &lt;button type="submit" data-bind="enable: itemToAdd().length > 0">
+        Add
+    &lt;/button>
+&lt;/form>
+&lt;p>Your values:&lt;/p>
+&lt;select multiple="multiple" height="5" data-bind="options:allItems, selectedOptions:selectedItems">
+&lt;/select>
+&lt;div>
+    &lt;button data-bind="click: removeSelected, enable: selectedItems().length > 0">
+        Remove
+    &lt;/button>
+    &lt;button data-bind="click: sortItems, enable: allItems().length > 1">
+        Sort
+    &lt;/button>
+&lt;/div></code></pre>
+            <p><a href="../src/examples/4-better-list/index.html" target="_blank">Run</a></p>
+            <ul>
+                <li class="fragment">add sort and remove functionality to list
+            </ul>
+        </section>
+        <section>
+            <h3>Interactive List - JS</h3>
+<pre><code class="html" contenteditable>var BetterListModel = function () {
+    this.itemToAdd = ko.observable("");
+    this.allItems = ko.observableArray(["Fries", "Eggs Benedict", "Ham", "Cheese"]);
+    this.selectedItems = ko.observableArray(["Ham"]);
+    this.addItem = function () {
+        if ((this.itemToAdd() != "") && (this.allItems.indexOf(this.itemToAdd()) < 0))
+        this.allItems.push(this.itemToAdd());
+        this.itemToAdd(""); // Clear the text box
+    };
+    this.removeSelected = function () {
+        this.allItems.removeAll(this.selectedItems());
+        this.selectedItems([]); // Clear selection
+    };
+    this.sortItems = function() {
+        this.allItems.sort();
+    };
+};
+ko.applyBindings(new BetterListModel());
+</code></pre>
+            <p><a href="../src/examples/4-better-list/index.html" target="_blank">Run</a></p>
+            <ul>
+                <li class="fragment">add sort and remove functionality to ViewModel
+            </ul>
+        </section>
+        <section>
+            <h3>Hello World with template</h3>
+<pre><code class="html" contenteditable>&lt;div class="liveExample">
+    &lt;p>First name: &lt;input data-bind='value: firstName, valueUpdate: "keypress"' />&lt;/p>
+    &lt;p>Last name: &lt;input data-bind='value: lastName, valueUpdate: "keypress"' />&lt;/p>
+    &lt;h2 data-bind="template: { name: 'hello-template', data: fullName }">&lt;/h2>
+&lt;/div>
+&lt;script type="text/html" id="hello-template">
+    Hello, &lt;span data-bind='text: $data'>&lt;/span>!
+&lt;/script>
+&lt;script type="text/javascript">
+    var ViewModel = function(text) {
+    this.myText = text;
+    };
+    ko.applyBindings(new ViewModel("Hello World!"));
+&lt;/script>
+</code></pre>
+            <p><a href="../src/examples/5-hello-world-binding-template/index.html" target="_blank">Run</a></p>
+            <ul>
+                <li class="fragment"><code>data-bind="template: { name: 'hello-template', data: fullName }</code>: bind data to template
+                <li class="fragment"><code>script type="text/html" id="hello-template"</code>: declared template
+                <li class="fragment"><code>$data</code>: access data from within template
+            </ul>
+        </section>
+
+    </section>
+
+        <section>
+            <section>
+                <h2>Code examples from Simon JS</h2>
+                <p><a target="_blank" href="https://github.com/afranken/simon">https://github.com/afranken/simon</a></p>
+            </section>
+        </section>
+        <section>
+            <h3>Wrap-Up</h3>
+            <ul>
+                <li class="fragment">MVVM
+                <li class="fragment">declarative two-way binding
+                <li class="fragment">automatic UI refresh if binded values change
+                <li class="fragment">dependency tracking
+                <li class="fragment">templating / nested views
+            </ul>
+        </section>
+        <section>
+            <h3>Links</h3>
+            <ul>
+                <li class="fragment"><a target="_blank" href="http://blog.stevensanderson.com/2010/07/05/introducing-knockout-a-ui-library-for-javascript/">Steven Sanderson announces / explains Kockout</a>
+                <li class="fragment"><a target="_blank" href="http://addyosmani.com/blog/understanding-mvvm-a-guide-for-javascript-developers/">Addy Osmani: Understanding MVVM</a>
+                <li class="fragment"><a target="_blank" href="http://www.sitepoint.com/beginners-guide-to-knockoutjs-part-1/">Beginners Guide to Knockout Part 1</a>
+                <li class="fragment"><a target="_blank" href="http://www.sitepoint.com/beginners-guide-to-knockoutjs-part-2/">Beginners Guide to Knockout Part 2</a>
+                <li class="fragment"><a target="_blank" href="http://www.knockmeout.net/">Knockedmeout</a>, a blog centered around Knockout
+            </ul>
+        </section>
+        <section>
+            <h1>Thank you!</h1>
+
+            <h3>Questions / Discussion</h3>
+
+            <p>
+                <small><a href="http://techotronic.de">Arne Franken</a> / <a href="http://twitter.com/techotronic">@techotronic</a>
+                </small>
+            </p>
+        </section>
+
+    </div>
+
+</div>
+
+<script src="../reveal.js/lib/js/head.min.js"></script>
+<script src="../reveal.js/js/reveal.min.js"></script>
+
+<script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/../reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+        // Optional libraries used to extend on ../reveal.js
+        dependencies: [
+            { src: '../reveal.js/lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            } },
+            { src: '../reveal.js/plugin/markdown/showdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            } },
+            { src: '../reveal.js/plugin/markdown/markdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            } },
+            { src: '../reveal.js/plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            } },
+            { src: '../reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function () {
+                return !!document.body.classList;
+            } },
+            { src: '../reveal.js/plugin/notes/notes.js', async: true, condition: function () {
+                return !!document.body.classList;
+            } }
+            // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+    });
+
+</script>
+
+</body>
+</html>
