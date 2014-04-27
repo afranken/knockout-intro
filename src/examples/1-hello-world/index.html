@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello World</title>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
+</head>
+<body>
+<div class="liveExample">
+    <h1 data-bind='text: myText'></h1>
+</div>
+
+<script type="text/javascript">//<![CDATA[
+    // Here's the data model
+    var ViewModel = function(text) {
+        this.myText = text;
+    };
+
+    ko.applyBindings(new ViewModel("Hello World!")); // This makes Knockout get to work
+//]]></script>
+</body>
+</html>
