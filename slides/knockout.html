@@ -130,7 +130,6 @@
                 <li class="fragment"><code>ko.applyBindings(new ViewModel())</code>: This makes Knockout get to work
             </ul>
         </section>
-        <section>
             <section>
                 <h2>Examples from Knockout Homepage</h2>
 
@@ -139,9 +138,10 @@
         <section>
             <h2>Simple two-way data binding</h2>
 <pre><code class="html" contenteditable>&lt;div class="liveExample">
-    &lt;p>First name: &lt;input data-bind='value: firstName, valueUpdate: "keypress"' />&lt;/p>
-    &lt;p>Last name: &lt;input data-bind='value: lastName, valueUpdate: "keypress"' />&lt;/p>
+    &lt;p>First name: &lt;input data-bind='value: firstName, valueUpdate: "afterkeydown"' />&lt;/p>
+    &lt;p>Last name: &lt;input data-bind='value: lastName, valueUpdate: "afterkeydown"' />&lt;/p>
     &lt;h2>Hello, &lt;span data-bind='text: fullName'> &lt;/span>!&lt;/h2>
+    &lt;div data-bind="visible: fullName().length > 15">You have a really long name!&lt;/div>
 &lt;/div>
 &lt;script type="text/javascript">
     var ViewModel = function(first, last) {
@@ -157,7 +157,7 @@
 </code></pre>
             <p><a href="../src/examples/2-hello-world-binding/index.html" target="_blank">Run</a></p>
             <ul>
-                <li class="fragment"><code>ko.observable</code>: KO fires internal events if variable values change
+                <li class="fragment"><code>ko.observable</code>: KO fires events if variable values change
                 <li class="fragment"><code>ko.computed</code>: KO will update value if observables change
                 <li class="fragment"><code>ko.computed(function(){},this)</code>: <code>bind(this)</code> correctly...
             </ul>
@@ -266,8 +266,6 @@ ko.applyBindings(new BetterListModel());
                 <li class="fragment"><code>$data</code>: access data from within template
             </ul>
         </section>
-
-    </section>
 
         <section>
             <section>
